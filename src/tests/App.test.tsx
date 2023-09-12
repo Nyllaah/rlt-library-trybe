@@ -4,6 +4,7 @@ import App from '../App';
 import renderWithRouter from '../renderWithRouter';
 
 const favTitle = 'Favorite Pokémon';
+
 describe('Teste se o topo da aplicação contém um conjunto fixo de links de navegação', () => {
   test('O primeiro link deve ter o texto "Home"', () => {
     renderWithRouter(<App />);
