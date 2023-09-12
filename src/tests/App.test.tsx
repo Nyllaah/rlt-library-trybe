@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
 
+const favTitle = 'Favorite Pokémon';
 describe('Teste se o topo da aplicação contém um conjunto fixo de links de navegação', () => {
   test('O primeiro link deve ter o texto "Home"', () => {
     renderWithRouter(<App />);
@@ -23,7 +24,7 @@ describe('Teste se o topo da aplicação contém um conjunto fixo de links de na
   test('O terceiro link deve ter o texto "Favorite Pokémon"', () => {
     renderWithRouter(<App />);
 
-    const favoritePokemon = screen.getByRole('link', { name: 'Favorite Pokémon' });
+    const favoritePokemon = screen.getByRole('link', { name: favTitle });
 
     expect(favoritePokemon).toBeInTheDocument();
   });
@@ -57,11 +58,11 @@ describe('Teste se a aplicação é redirecionada para a página clicada', () =>
   test('a aplicação é redirecionada para a página de Pokémon Favoritados, na URL /favorites, ao clicar no link Favorite Pokémon da barra de navegação.', async () => {
     renderWithRouter(<App />);
 
-    const favoritePokemon = screen.getByRole('link', { name: 'Favorite Pokémon' });
+    const favoritePokemon = screen.getByRole('link', { name: favTitle });
 
     await userEvent.click(favoritePokemon);
 
-    const title = await screen.findByRole('heading', { name: 'Favorite Pokémon' });
+    const title = await screen.findByRole('heading', { name: favTitle });
 
     expect(title).toBeInTheDocument();
   });
