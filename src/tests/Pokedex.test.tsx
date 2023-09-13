@@ -47,17 +47,18 @@ describe('este o componente <Pokedex.tsx />', () => {
     return !isInTheList && pokemonTypeList.push(pokemon.type);
   });
 
-  test('Pokédex tem os botões de filtro', () => {
-    renderWithRouter(<App />);
+  // test('Pokédex tem os botões de filtro', () => {
+  //   renderWithRouter(<App />);
 
-    pokemonTypeList.forEach((type) => {
-      const button = screen.getByRole('button', { name: type });
-      expect(button).toBeInTheDocument();
-    });
-  });
-
-  // test.each(pokemonTypeList)('Pokédex tem o botão de filtro', (i) => {
-  //   const button = screen.getByRole('button', { name: i });
-  //   expect(button).toBeInTheDocument();
+  //   pokemonTypeList.forEach((type) => {
+  //     const button = screen.getByRole('button', { name: type });
+  //     expect(button).toBeInTheDocument();
+  //   });
   // });
+
+  test.each(pokemonTypeList)('Pokédex tem o botão de filtro "%s"', (i) => {
+    renderWithRouter(<App />);
+    const button = screen.getByRole('button', { name: i });
+    expect(button).toBeInTheDocument();
+  });
 });
