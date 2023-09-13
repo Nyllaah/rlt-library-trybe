@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../App';
 import pokemonList from '../data';
 import renderWithRouter from '../renderWithRouter';
+import { Pokedex } from '../pages';
 
 describe('este o componente <Pokedex.tsx />', () => {
   test('a página contém um heading h2 com o texto Encountered Pokémon', () => {
@@ -11,25 +12,30 @@ describe('este o componente <Pokedex.tsx />', () => {
     expect(title).toBeVisible();
   });
 
-  test('é exibido o próximo Pokémon da lista quando o botão Próximo Pokémon é clicado:', async () => {
-    renderWithRouter(<App />);
+  test('é exibido o próximo Pokémon da lista quando o botão Próximo Pokémon é clicado', async () => {
+    renderWithRouter(<Pokedex
+      pokemonList={
+      [pokemonList[0], pokemonList[1]]
+}
+      favoritePokemonIdsObj={ { 25: false, 4: false } }
+    />);
 
-    // pokemonList.forEach(async (pokemon, index) => {
-    //   const currentPokemon = screen.getByTestId('pokemon-name');
-    //   const nextBtn = screen.getByTestId('next-pokemon');
-    //   expect(nextBtn).toBeVisible();
-    //   expect(currentPokemon).toHaveTextContent(pokemon.name);
-    //   await userEvent.click(nextBtn);
-    //   const nextPokemon = await screen.findByTestId('pokemon-name');
-    //   expect(nextPokemon).toHaveTextContent(pokemonList[index + 1].name);
-    // });
-
-    const currentPokemon = screen.getByTestId('pokemon-name');
     const nextBtn = screen.getByTestId('next-pokemon');
+    const currentPokemon = screen.getByTestId('pokemon-name');
+
     expect(nextBtn).toBeVisible();
+    expect(nextBtn).toHaveTextContent('Próximo Pokémon');
+
     expect(currentPokemon).toHaveTextContent(pokemonList[0].name);
     await userEvent.click(nextBtn);
-    const nextPokemon = await screen.findByTestId('pokemon-name');
-    expect(nextPokemon).toHaveTextContent(pokemonList[1].name);
+    expect(currentPokemon).toHaveTextContent(pokemonList[1].name);
+    await userEvent.click(nextBtn);
+    expect(currentPokemon).toHaveTextContent(pokemonList[0].name);
+  });
+
+  test('é mostrado apenas um Pokémon por vez', () => {
+    renderWithRouter(<App />);
+    const pokemons = screen.queryAllByTestId('pokemon-name');
+    expect(pokemons).toHaveLength(1);
   });
 });
