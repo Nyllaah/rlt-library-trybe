@@ -35,7 +35,29 @@ describe('este o componente <Pokedex.tsx />', () => {
 
   test('é mostrado apenas um Pokémon por vez', () => {
     renderWithRouter(<App />);
+
     const pokemons = screen.queryAllByTestId('pokemon-name');
+
     expect(pokemons).toHaveLength(1);
   });
+
+  const pokemonTypeList:string[] = [];
+  pokemonList.map((pokemon) => {
+    const isInTheList = pokemonTypeList.find((type) => type === pokemon.type);
+    return !isInTheList && pokemonTypeList.push(pokemon.type);
+  });
+
+  test('Pokédex tem os botões de filtro', () => {
+    renderWithRouter(<App />);
+
+    pokemonTypeList.forEach((type) => {
+      const button = screen.getByRole('button', { name: type });
+      expect(button).toBeInTheDocument();
+    });
+  });
+
+  // test.each(pokemonTypeList)('Pokédex tem o botão de filtro', (i) => {
+  //   const button = screen.getByRole('button', { name: i });
+  //   expect(button).toBeInTheDocument();
+  // });
 });
