@@ -11,7 +11,9 @@ describe('Teste se o topo da aplicação contém um conjunto fixo de links de na
 
     const home = screen.getByRole('link', { name: 'Home' });
 
-    expect(home).toBeInTheDocument();
+    // expect(home.textContent).toBe('Home');
+    // expect(home).toHaveTextContent('Home');
+    expect(home).toBeVisible();
   });
 
   test('O segundo link deve ter o texto "About"', () => {
@@ -19,7 +21,7 @@ describe('Teste se o topo da aplicação contém um conjunto fixo de links de na
 
     const about = screen.getByRole('link', { name: 'About' });
 
-    expect(about).toBeInTheDocument();
+    expect(about).toBeVisible();
   });
 
   test('O terceiro link deve ter o texto "Favorite Pokémon"', () => {
@@ -27,7 +29,7 @@ describe('Teste se o topo da aplicação contém um conjunto fixo de links de na
 
     const favoritePokemon = screen.getByRole('link', { name: favTitle });
 
-    expect(favoritePokemon).toBeInTheDocument();
+    expect(favoritePokemon).toBeVisible();
   });
 });
 
