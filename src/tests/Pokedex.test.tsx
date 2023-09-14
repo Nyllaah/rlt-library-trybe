@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import pokemonList from '../data';
@@ -51,6 +51,12 @@ describe('teste o componente <Pokedex.tsx />', () => {
     renderWithRouter(<App />);
     const button = screen.getByRole('button', { name: i });
     expect(button).toBeInTheDocument();
+  });
+
+  test('teste', () => {
+    renderWithRouter(<App />);
+    const buttons = screen.queryAllByTestId('pokemon-type-button');
+    expect(buttons).toHaveLength(7);
   });
 
   pokemonTypeList = pokemonTypeList.filter((type) => type !== 'All');
