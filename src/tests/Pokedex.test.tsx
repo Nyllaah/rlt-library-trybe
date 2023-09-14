@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import pokemonList from '../data';
@@ -77,5 +77,20 @@ describe('teste o componente <Pokedex.tsx />', () => {
       expect(allBtn).toBeVisible();
       expect(currentPokemonType).toHaveTextContent(type);
     }
+  });
+
+  test('clique All reseta', async () => {
+    renderWithRouter(<App />);
+    const allBtn = screen.getByRole('button', { name: 'All' });
+    const typeBtn = screen.getByRole('button', { name: 'Fire' });
+
+    await userEvent.click(typeBtn);
+
+    const currentPokemonType = screen.getByTestId('pokemon-type');
+    expect(currentPokemonType).toHaveTextContent('Fire');
+
+    await userEvent.click(allBtn);
+
+    expect(currentPokemonType).toHaveTextContent('Electric');
   });
 });
