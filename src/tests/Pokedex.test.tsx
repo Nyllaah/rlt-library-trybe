@@ -1,14 +1,14 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
 import pokemonList from '../data';
 import renderWithRouter from '../renderWithRouter';
 import { Pokedex } from '../pages';
 
-describe('este o componente <Pokedex.tsx />', () => {
+describe('teste o componente <Pokedex.tsx />', () => {
   test('a página contém um heading h2 com o texto Encountered Pokémon', () => {
     renderWithRouter(<App />);
-    const title = screen.getByText('Encountered Pokémon');
+    const title = screen.getByRole('heading', { name: 'Encountered Pokémon' });
     expect(title).toBeVisible();
   });
 
@@ -41,24 +41,35 @@ describe('este o componente <Pokedex.tsx />', () => {
     expect(pokemons).toHaveLength(1);
   });
 
-  const pokemonTypeList:string[] = [];
+  let pokemonTypeList:string[] = ['All'];
   pokemonList.map((pokemon) => {
     const isInTheList = pokemonTypeList.find((type) => type === pokemon.type);
     return !isInTheList && pokemonTypeList.push(pokemon.type);
   });
 
-  // test('Pokédex tem os botões de filtro', () => {
-  //   renderWithRouter(<App />);
-
-  //   pokemonTypeList.forEach((type) => {
-  //     const button = screen.getByRole('button', { name: type });
-  //     expect(button).toBeInTheDocument();
-  //   });
-  // });
-
   test.each(pokemonTypeList)('Pokédex tem o botão de filtro "%s"', (i) => {
     renderWithRouter(<App />);
     const button = screen.getByRole('button', { name: i });
     expect(button).toBeInTheDocument();
+  });
+
+  pokemonTypeList = pokemonTypeList.filter((type) => type !== 'All');
+
+  test.each(pokemonTypeList)('Após a seleção de um botão de tipo, a Pokédex deve circular somente pelos Pokémon do tipo "%s"', async (type) => {
+    renderWithRouter(<App />);
+    const nextBtn = screen.getByTestId('next-pokemon');
+    const typeBtn = screen.getByRole('button', { name: type });
+    const currentPokemonType = screen.getByTestId('pokemon-type');
+    const allBtn = screen.getByRole('button', { name: 'All' });
+
+    await userEvent.click(typeBtn);
+    expect(allBtn).toBeVisible();
+    expect(currentPokemonType).toHaveTextContent(type);
+
+    if (!nextBtn.ariaDisabled) {
+      await userEvent.click(nextBtn);
+      expect(allBtn).toBeVisible();
+      expect(currentPokemonType).toHaveTextContent(type);
+    }
   });
 });
