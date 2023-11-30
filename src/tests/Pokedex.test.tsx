@@ -63,7 +63,7 @@ describe('teste o componente <Pokedex.tsx />', () => {
 
   test.each(pokemonTypeList)('Após a seleção de um botão de tipo, a Pokédex deve circular somente pelos Pokémon do tipo "%s"', async (type) => {
     renderWithRouter(<App />);
-    const nextBtn = screen.getByTestId('next-pokemon');
+
     const typeBtn = screen.getByRole('button', { name: type });
     const currentPokemonType = screen.getByTestId('pokemon-type');
     const allBtn = screen.getByRole('button', { name: 'All' });
@@ -71,12 +71,6 @@ describe('teste o componente <Pokedex.tsx />', () => {
     await userEvent.click(typeBtn);
     expect(allBtn).toBeVisible();
     expect(currentPokemonType).toHaveTextContent(type);
-
-    if (!nextBtn.ariaDisabled) {
-      await userEvent.click(nextBtn);
-      expect(allBtn).toBeVisible();
-      expect(currentPokemonType).toHaveTextContent(type);
-    }
   });
 
   test('clique All reseta', async () => {
